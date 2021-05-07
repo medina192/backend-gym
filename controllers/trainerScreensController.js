@@ -79,7 +79,7 @@ const userSendMessage = async(req, res) => {
 
     if(lengthMessages !== 0)
     {
-        console.log('if');
+        
         const body = {
             email_usuario, 
             email_entrenador, 

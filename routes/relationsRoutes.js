@@ -13,6 +13,8 @@ const {
     getRoutines,
     getRoutinesByUser,
     getTrainersOfRoutines,
+    getSavedRoutinesByTrainer,
+    updateRoutineByTrainer,
 } = require('../controllers/relationController');
 
 
@@ -30,6 +32,8 @@ router.post('/saveroutinebytrainer', saveRoutineByTrainer);
 router.get('/getroutines/:id', getRoutines);
 router.get('/getRoutinesByUser/:id', getRoutinesByUser);
 router.get('/gettrainersofroutines/:id',getTrainersOfRoutines);
+router.get('/getroutinesbytrainer/:id',getSavedRoutinesByTrainer);
+router.put('/updateroutinebytrainer/:id',updateRoutineByTrainer);
 //mdylhgmtnfnpqfif
 
 module.exports = router;

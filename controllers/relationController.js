@@ -315,7 +315,6 @@ debug: true
 
 const saveRoutineByTrainer = async(req, res) => {
 
-    console.log(req.body);
     const body = req.body;
 
     const sqlRegister = `INSERT INTO rutinas SET ?`;
@@ -335,6 +334,39 @@ const saveRoutineByTrainer = async(req, res) => {
             console.log('res saving routine trainer',resp);
             return res.json({
                 message: 'gettrainer',
+                resp
+            });
+        }
+    });
+}
+
+
+const updateRoutineByTrainer = async(req, res) => {
+
+    const body = req.body;
+    console.log('body', body);
+    const idRutina = req.params.id;
+    console.log('id', idRutina);
+
+    const sqlRegister = `Update rutinas SET tipo = '${body.tipo}', ejercicios = '${body.ejercicios}',
+    id_relacion_entrenador_usuario = '${body.id_relacion_entrenador_usuario}',
+    idUsuario = '${body.idUsuario}', nombre = '${body.nombre}' WHERE idRutinas = "${idRutina}";`;
+
+    connection.query(sqlRegister,body, (error, resp) => {
+        if(error)
+        {   
+            console.log(error.sqlMessage);
+            return res.status(400).json({
+                ok: false,
+                message: 'error update routine trainer',
+                sqlMessage: error.sqlMessage
+            });
+        }
+        else{
+            
+            console.log('res update routine trainer',resp);
+            return res.json({
+                message: 'routine updated',
                 resp
             });
         }
@@ -371,39 +403,15 @@ const getRoutinesByUser = (req, res) => {
         }
     });
 
-    /*
-    const sqlRegister = `Select * from rutinas WHERE email_usuario`;
-
-    connection.query(sqlRegister,body, (error, resp) => {
-        if(error)
-        {   
-            console.log(error.sqlMessage);
-            return res.status(400).json({
-                ok: false,
-                message: 'error saving routine',
-                sqlMessage: error.sqlMessage
-            });
-        }
-        else{
-            
-            console.log('res saving routine',resp);
-            return res.json({
-                message: 'gettrainer',
-                resp
-            });
-        }
-    });
-    */
 }
 
 
 
 const getRoutines = async(req, res) => {
     
-    const id =  req.params.id;  console.log(id);
+    const id =  req.params.id;  
 
-
-    const sqlRegister = `SELECT ejercicios FROM rutinas WHERE id_relacion_entrenador_usuario = ${id}`;
+    const sqlRegister = `SELECT * FROM rutinas WHERE id_relacion_entrenador_usuario = ${id}`;
 
     connection.query(sqlRegister, (error, resp) => {
         if(error)
@@ -424,30 +432,6 @@ const getRoutines = async(req, res) => {
             });
         }
     });
-
-    /*
-    const sqlRegister = `Select * from rutinas WHERE email_usuario`;
-
-    connection.query(sqlRegister,body, (error, resp) => {
-        if(error)
-        {   
-            console.log(error.sqlMessage);
-            return res.status(400).json({
-                ok: false,
-                message: 'error saving routine',
-                sqlMessage: error.sqlMessage
-            });
-        }
-        else{
-            
-            console.log('res saving routine',resp);
-            return res.json({
-                message: 'gettrainer',
-                resp
-            });
-        }
-    });
-    */
 }
 
 
@@ -481,6 +465,97 @@ const getTrainersOfRoutines = async(req, res) => {
 }
 
 
+const getSavedRoutinesByTrainer = async(req, res) =>{
+
+    const idTrainer = req.params.id;
+
+    const getIdsRelationsTrainer = new Promise((resolve, reject) => {
+
+        const sqlRegister = `select id_relacion_entrenador_usuario from  relacion_entrenador_usuario where idEntrenador = '13';`;
+
+        connection.query(sqlRegister, (error, resp) => {
+            if(error)
+            {   
+                console.log(error.sqlMessage);
+                reject(res.status(400).json({
+                    ok: false,
+                    message: 'error getting ids',
+                    sqlMessage: error.sqlMessage
+                }));
+            }
+            else{
+                resolve(resp);
+            }
+        });
+    });
+
+    let auxArrrayIds = [];
+
+    try {
+        const ids = await getIdsRelationsTrainer;
+
+        
+        for(let i = 0; i < ids.length; i++)
+        {
+            
+            auxArrrayIds[i] = ids[i].id_relacion_entrenador_usuario;
+        }
+        
+
+    } catch (error) {
+        console.log('error promises ids');
+    }
+
+    let auxSqlLine = '';
+
+    for(let i = 0; i < auxArrrayIds.length; i++)
+    {
+        auxSqlLine += auxArrrayIds[i].toString();
+        if(i == auxArrrayIds.length - 1)
+        {
+            
+        }
+        else{
+            auxSqlLine += ',';
+        }
+    }
+
+    const getRoutinesWithIds = new Promise((resolve, reject) => {
+
+        const sqlRegister = ` select * from rutinas where find_in_set(id_relacion_entrenador_usuario, '${auxSqlLine}');`;
+
+        connection.query(sqlRegister, (error, resp) => {
+            if(error)
+            {   
+                console.log(error.sqlMessage);
+                reject(res.status(400).json({
+                    ok: false,
+                    message: 'error getting routine saved',
+                    sqlMessage: error.sqlMessage
+                }));
+            }
+            else{
+                
+                //console.log('res saving routine',resp);
+                resolve(resp);
+
+            }
+        });
+    });
+
+
+    try {
+        const routines = await getRoutinesWithIds;
+        return res.json({
+            message: 'get routines',
+            routines
+        });
+    } catch (error) {
+        console.log('error routines ids');
+    }
+
+}
+
 
 module.exports = {
     registerRelation,
@@ -494,4 +569,6 @@ module.exports = {
     getRoutines,
     getRoutinesByUser,
     getTrainersOfRoutines,
+    getSavedRoutinesByTrainer,
+    updateRoutineByTrainer,
 }

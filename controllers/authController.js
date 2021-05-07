@@ -24,7 +24,7 @@ const registerNewUser = async(req, res) => {
             });
         }
         else{
-            console.log(resp);
+            console.log('registerNewUser', resp);
             return res.json({
                 message: 'user registered',
                 resp
@@ -61,6 +61,8 @@ const updateAfterSaveRol = async(req, res) => {
         }
     });
 }
+
+
 
 const saveRol = async(req, res) => {
     
@@ -131,6 +133,7 @@ const logIn = async(req, res) => {
             }
         });
 }
+
 
 
 const getRol = async(req, res) => {
