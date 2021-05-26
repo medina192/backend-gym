@@ -4,8 +4,9 @@ require('./config/config');
 const fetch = require('node-fetch');
 const admin = require("firebase-admin");
 
+const fileUpload = require('express-fileupload');
 
-
+require('dotenv').config();
 
 
 const http = require('http');
@@ -16,6 +17,8 @@ const socketio = require('socket.io');
 const mysql = require('mysql');
 const connection = require('./database/database');
 const cors = require('cors');
+const path = require('path');
+
 
 const bodyparser = require('body-parser');
 
@@ -27,8 +30,13 @@ app.use(bodyparser.urlencoded({extended: false}));
 app.use(bodyparser.json());
 
 
+app.use(fileUpload({
+    useTempFiles : true,
+    tempFileDir : '/tmp/'
+}));
 
-
+app.use(express.static(path.join(__dirname, 'public')));
+console.log(__dirname);
 app.get('/getusers', (req, res) => {
 
     const sql = `SELECT * from usuario`;
@@ -119,8 +127,10 @@ app.post('/topic', (req, res) => {
               */
               
               notification:{
-                body : "This week's edition is now available.",
-                title : "NewsMagazine.com",
+                body : "Notificación GymRoom",
+                title : "Mensaje exitoso",
+                //title: 'Aplicacion en segundo plano',
+                //title: 'Aplicación cerrada'
               },
               
             data: {
@@ -148,8 +158,8 @@ app.post('/topic', (req, res) => {
     res.send("Sending Notification to a Topic...");
     const data = {
         topic: "juanortiz",
-        titulo: "Re:codigo",
-        mensaje: "Message from Nodejs to Topic test"
+        titulo: "GymRoom",
+        mensaje: "Mensaje de node.js"
     }
     
     sendPushToTopic(data);
@@ -166,10 +176,10 @@ app.get('/', (req, res) => {
 });
 
 
-
 app.use('/auth', require('./routes/authRoutes'));
 app.use('/userscreens', require('./routes/userScreensRoutes'));
 app.use('/relations', require('./routes/relationsRoutes'));
+app.use('/files', require('./routes/filesRoutes'));
 
 app.listen(process.env.PORT, () => {
     console.log(`Port running on port ${process.env.PORT}`);
