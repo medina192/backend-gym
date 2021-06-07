@@ -18,7 +18,8 @@ const { v4: uuidv4 } = require('uuid');
 //const { content } = require('../pdf/pdfContent');
 //const styles = require('../pdf/styles');
 
-const serverURL = 'http://192.168.0.9:3002';
+//const serverURL = 'http://192.168.0.9:3002';
+const serverURL = 'https://aux-gym-room.herokuapp.com';
 
 const uploadImage = async(req, res) => {
 
