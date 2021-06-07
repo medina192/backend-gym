@@ -1,5 +1,5 @@
 const express = require('express');
-require('./config/config');
+//require('./config/config');
 
 const fetch = require('node-fetch');
 const admin = require("firebase-admin");
@@ -7,7 +7,7 @@ const admin = require("firebase-admin");
 const fileUpload = require('express-fileupload');
 
 require('dotenv').config();
-
+console.log(process.env.PORT);
 
 const http = require('http');
 const morgan = require('morgan');
@@ -20,14 +20,9 @@ const cors = require('cors');
 const path = require('path');
 
 
-const bodyparser = require('body-parser');
-
 const app = express();
 
 app.use(cors());
-
-app.use(bodyparser.urlencoded({extended: false}));
-app.use(bodyparser.json());
 
 
 app.use(fileUpload({
@@ -342,7 +337,7 @@ app.get('*', (req, res) => {
     res.sendFile( path.resolve( __dirname, 'public/index.html' ) );
 });
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 3002, () => {
     console.log(`Port running on port ${process.env.PORT}`);
 });
 
