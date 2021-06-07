@@ -321,7 +321,7 @@ app.post('/topic', (req, res) => {
 });  
 
 
-
+/*
 app.get('/', (req, res) => {
 
     res.json({
@@ -329,6 +329,7 @@ app.get('/', (req, res) => {
     });
 
 });
+*/
 
 
 app.use('/auth', require('./routes/authRoutes'));
