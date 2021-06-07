@@ -7,7 +7,7 @@ const connection = require('../database/database');
 const registerNewUser = async(req, res) => {
 
     const body = req.body;
-
+    console.log('body', body);
     let salt = bcrypt.genSaltSync(10);
     body.password = bcrypt.hashSync(body.password, salt);
     

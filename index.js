@@ -4,6 +4,10 @@ const express = require('express');
 const fetch = require('node-fetch');
 const admin = require("firebase-admin");
 
+const bodyparser = require('body-parser');
+
+
+
 const fileUpload = require('express-fileupload');
 
 require('dotenv').config();
@@ -12,6 +16,7 @@ console.log(process.env.PORT);
 const http = require('http');
 //const morgan = require('morgan');
 //const socketio = require('socket.io');
+
 
 
 const mysql = require('mysql');
@@ -24,6 +29,8 @@ const app = express();
 
 app.use(cors());
 
+app.use(bodyparser.urlencoded({extended: false}));
+app.use(bodyparser.json());
 
 app.use(fileUpload({
     useTempFiles : true,
