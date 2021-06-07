@@ -10,8 +10,8 @@ require('dotenv').config();
 console.log(process.env.PORT);
 
 const http = require('http');
-const morgan = require('morgan');
-const socketio = require('socket.io');
+//const morgan = require('morgan');
+//const socketio = require('socket.io');
 
 
 const mysql = require('mysql');
