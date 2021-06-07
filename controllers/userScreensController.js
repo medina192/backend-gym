@@ -358,6 +358,33 @@ const updateMeasures = async(req, res) => {
 
 
 
+const saveRoutineByUser = async(req, res) => {
+
+    const body = req.body;
+
+    const sqlRegister = `INSERT INTO rutinas SET ?`;
+
+    connection.query(sqlRegister,body, (error, resp) => {
+        if(error)
+        {   
+            console.log(error.sqlMessage);
+            return res.status(400).json({
+                ok: false,
+                message: 'error saving routine user',
+                sqlMessage: error.sqlMessage
+            });
+        }
+        else{
+            
+            console.log('res saving routine trainer',resp);
+            return res.json({
+                message: 'save routine user',
+                resp
+            });
+        }
+    });
+}
+
 
 module.exports = {
     getListGeneralTrainers,
@@ -370,4 +397,5 @@ module.exports = {
     updateUserStatistics,
     getMeasures,
     updateMeasures,
+    saveRoutineByUser,
 }

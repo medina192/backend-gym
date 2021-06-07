@@ -10,6 +10,7 @@ const {
     saveImage,
     saveVideo,
     getDocuments,
+    savePdf,
 } = require('../controllers/filesController');
 
 const router = Router();
@@ -22,5 +23,6 @@ router.post('/createpdf', createPDF);
 router.post('/saveimage', saveImage);
 router.post('/savevideo', saveVideo);
 router.post('/getdocuments', getDocuments);
+router.post('/savepdf', savePdf);
 
 module.exports = router;

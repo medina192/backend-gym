@@ -380,6 +380,98 @@ const saveFile = async(req, res) => {
 }
 
 
+const savePdf = async(req, res) => {
+
+  
+ //console.log('req',req.body.formData._parts[0]['f]);
+
+
+ const bodyObject = JSON.parse(req.headers['body']);
+ console.log('asd',bodyObject);
+ 
+ if (!req.files || Object.keys(req.files).length === 0) {
+   res.status(400).send('No files were uploaded. 1');
+   return;
+ }
+
+ const date = new Date();
+ const isoDate = date.toISOString().slice(0,10)+'-'+date.toISOString().slice(11,13)+'-'+date.toISOString().slice(14,16)+'-'+date.toISOString().slice(17,19);
+
+
+ const { file } = req.files;
+ console.log('qwe', file);
+
+
+ //const positionDot = file.name.search(/\./);
+ //const extension = file.name.substr(positionDot, file.name.length-1);
+
+ const namePdf = bodyObject.namePdf + '___'+isoDate+ '.pdf';
+ uploadPath = path.join(__dirname, '../public/pdfs', namePdf);
+      
+ try {
+   const resp = await file.mv(uploadPath, function(err) {
+     if (err) {
+       console.log('12', err);
+       return res.status(500).send(err);
+     }
+     console.log('---------------------- file loaded');
+   });
+ } catch (error) {
+   console.log('error saving file', error);
+   return res.status(400).json({
+       ok: false,
+       message: 'error saving file server',
+       sqlMessage: error.sqlMessage
+   });
+ }
+
+
+  
+  let ShowInPerfil = bodyObject.ShowInPerfil ? 1 : 0;
+  let publicPDF = bodyObject.publicPdf ? 1 : 0;
+
+  const body = {
+    nombreDocumento: bodyObject.namePdf,
+    idEntrenador: bodyObject.idTrainer,
+    nombreEntrenador: bodyObject.trainerName,
+    apellidoEntrenador: bodyObject.trainerLastName,
+    url: `${serverURL}/pdfs/${namePdf}`,
+    public: publicPDF,
+    mostrarEnPerfil: ShowInPerfil,
+    tipo: 'pdf',
+  }
+
+
+
+    try {
+      const sqlRegister = `INSERT INTO documentos SET ?`;
+
+      connection.query(sqlRegister,body, (error, resp) => {
+          if(error)
+          {   
+              console.log(error.sqlMessage);
+              return res.status(400).json({
+                  ok: false,
+                  message: 'error register user',
+                  sqlMessage: error.sqlMessage
+              });
+          }
+          else{
+              console.log('registerNewUser', resp);
+              return res.json({
+                  message: 'file saved',
+                  resp
+              });
+          }
+      });
+    } catch (error) {
+      console.log('error pdf saving', error);
+    }
+
+
+}
+
+
 
 
 /*
@@ -700,4 +792,5 @@ module.exports = {
     saveImage,
     saveVideo,
     getDocuments,
+    savePdf,
 }

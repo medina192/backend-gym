@@ -12,6 +12,7 @@ const {
     updateUserStatistics,
     getMeasures,
     updateMeasures,
+    saveRoutineByUser,
 } = require('../controllers/userScreensController');
 
 const router = Router();
@@ -26,5 +27,6 @@ router.post('/createuserstatistics', createUserStatistics);
 router.put('/updateuserstatistcis/:id',updateUserStatistics);
 router.get('/getmeasures/:id', getMeasures);
 router.put('/updatemeasures/:id', updateMeasures);
+router.post('/saveroutinebyuser', saveRoutineByUser);
 
 module.exports = router;

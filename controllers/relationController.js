@@ -471,7 +471,7 @@ const getSavedRoutinesByTrainer = async(req, res) =>{
 
     const getIdsRelationsTrainer = new Promise((resolve, reject) => {
 
-        const sqlRegister = `select id_relacion_entrenador_usuario from  relacion_entrenador_usuario where idEntrenador = '13';`;
+        const sqlRegister = `select id_relacion_entrenador_usuario from  relacion_entrenador_usuario where idEntrenador = '${idTrainer}';`;
 
         connection.query(sqlRegister, (error, resp) => {
             if(error)

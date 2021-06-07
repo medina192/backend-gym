@@ -118,7 +118,8 @@ const logIn = async(req, res) => {
                     
                     return res.status(400).json({
                         ok: false,
-                        message: 'the email or password don´t match',
+                        //message: 'the email or password don´t match',
+                        message: 'the email does not exists',
                         error
                     });
                 }
