@@ -333,6 +333,7 @@ app.get('/', (req, res) => {
 });
 */
 
+let aux;
 
 app.use('/auth', require('./routes/authRoutes'));
 app.use('/userscreens', require('./routes/userScreensRoutes'));
