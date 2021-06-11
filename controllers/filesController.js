@@ -21,6 +21,8 @@ const { v4: uuidv4 } = require('uuid');
 //const serverURL = 'http://192.168.0.9:3002';
 const serverURL = 'https://aux-gym-room.herokuapp.com';
 
+
+
 const uploadImage = async(req, res) => {
 
     if (!req.files || Object.keys(req.files).length === 0) {
@@ -55,6 +57,217 @@ const uploadImage = async(req, res) => {
       });
     });
     */
+}
+
+
+
+const uploadImageCloud = async(req, res) => {
+
+  if (!req.files || Object.keys(req.files).length === 0) {
+    res.status(400).send('No files were uploaded. 1');
+    return;
+  }
+
+  const { file } = req.files;
+  console.log('file', file);
+  //uploadPath = path.join(__dirname, '../uploads/', file.name);
+
+
+  const { tempFilePath } = file;
+
+  try {
+    const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+    res.json({
+      url: secure_url
+  });
+  } catch (error) {
+    console.log('error', error);
+  }
+
+  /*
+  file.mv(uploadPath, function(err) {
+    if (err) {
+      return res.status(500).send(err);
+    }
+
+    res.json({
+        message: `fileeeeeee ${uploadPath}`
+    });
+  });
+  */
+}
+
+
+
+const saveImageCloud = async(req, res) => {
+
+
+  const bodyObject = JSON.parse(req.headers['body']);
+  
+  if (!req.files || Object.keys(req.files).length === 0) {
+    res.status(400).send('No files were uploaded. 1');
+    return;
+  }
+
+  const date = new Date();
+  const isoDate = date.toISOString().slice(0,10)+'-'+date.toISOString().slice(17,19);
+
+  const { file } = req.files;
+
+  const positionDot = file.name.search(/\./);
+  const extension = file.name.substr(positionDot, file.name.length-1);
+
+  const nameImage = bodyObject.nameImage + '___'+isoDate+extension;
+  //uploadPath = path.join(__dirname, '../public/images', nameImage);
+
+  const { tempFilePath } = file;
+
+  let url = '';
+       
+  try {
+    const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+    url = secure_url;
+  } catch (error) {
+    console.log('error', error);
+    return res.status(400).json({
+      ok: false,
+      message: 'error saving file in cloudinary',
+      sqlMessage: error.sqlMessage
+  });
+  }
+
+
+  let showInPerfil = bodyObject.ShowInPerfil ? 1 : 0;
+  let publicImage = bodyObject.publicImage ? 1 : 0;
+
+  const body = {
+    nombreDocumento: nameImage,
+    idEntrenador: bodyObject.idTrainer,
+    nombreEntrenador: bodyObject.trainerName,
+    apellidoEntrenador: bodyObject.trainerLastName,
+    url,
+    public: publicImage,
+    mostrarEnPerfil: showInPerfil,
+    tipo: 'image',
+  }
+
+  try {
+    const sqlRegister = `INSERT INTO documentos SET ?`;
+
+    connection.query(sqlRegister,body, (error, resp) => {
+        if(error)
+        {   
+            console.log(error.sqlMessage);
+            return res.status(400).json({
+                ok: false,
+                message: 'error register user',
+                sqlMessage: error.sqlMessage
+            });
+        }
+        else{
+            console.log('registerNewUser', resp);
+            return res.json({
+                message: 'file saved',
+                resp
+            });
+        }
+    });
+  } catch (error) {
+    console.log('error', error);
+    return res.status(400).json({
+      ok: false,
+      message: 'error saving document',
+      sqlMessage: error.sqlMessage
+    });
+  }
+  
+}
+
+
+
+
+const saveVideoCloud = async(req, res) => {
+
+
+  const bodyObject = JSON.parse(req.headers['body']);
+  
+  if (!req.files || Object.keys(req.files).length === 0) {
+    res.status(400).send('No files were uploaded. 1');
+    return;
+  }
+
+  const date = new Date();
+  const isoDate = date.toISOString().slice(0,10)+'-'+date.toISOString().slice(17,19);
+
+  const { file } = req.files;
+
+  const positionDot = file.name.search(/\./);
+  const extension = file.name.substr(positionDot, file.name.length-1);
+
+  const nameVideo = bodyObject.nameVideo + '___'+isoDate+extension;
+  //uploadPath = path.join(__dirname, '../public/images', nameImage);
+
+  const { tempFilePath } = file;
+
+  let url = '';
+       
+  try {
+    const { secure_url } = await cloudinary.uploader.upload(tempFilePath, {resource_type: "video"});
+    url = secure_url;
+  } catch (error) {
+    console.log('error', error);
+    return res.status(400).json({
+      ok: false,
+      message: 'error saving file in cloudinary',
+      sqlMessage: error.sqlMessage
+  });
+  }
+
+
+
+  let showInPerfil = bodyObject.ShowInPerfil ? 1 : 0;
+  let publicVideo = bodyObject.publicVideo ? 1 : 0;
+
+  const body = {
+    nombreDocumento: nameVideo,
+    idEntrenador: bodyObject.idTrainer,
+    nombreEntrenador: bodyObject.trainerName,
+    apellidoEntrenador: bodyObject.trainerLastName,
+    url,
+    public: publicVideo,
+    mostrarEnPerfil: showInPerfil,
+    tipo: 'video',
+  }
+
+  try {
+    const sqlRegister = `INSERT INTO documentos SET ?`;
+
+    connection.query(sqlRegister,body, (error, resp) => {
+        if(error)
+        {   
+            console.log(error.sqlMessage);
+            return res.status(400).json({
+                ok: false,
+                message: 'error register user',
+                sqlMessage: error.sqlMessage
+            });
+        }
+        else{
+            console.log('registerNewUser', resp);
+            return res.json({
+                message: 'file saved',
+                resp
+            });
+        }
+    });
+  } catch (error) {
+    return res.status(400).json({
+      ok: false,
+      message: 'error saving file',
+      sqlMessage: error.sqlMessage
+    });
+  }
+  
 }
 
 
@@ -217,11 +430,6 @@ const saveImage = async(req, res) => {
 const saveVideo = async(req, res) => {
 
   //console.log('req',req.body.formData._parts[0]['f]);
-
-
-  console.log('reqaaaaa',req.files);
-
-
 
   const bodyObject = JSON.parse(req.headers['body']);
   console.log('asd',bodyObject);
@@ -795,4 +1003,6 @@ module.exports = {
     saveVideo,
     getDocuments,
     savePdf,
+    saveImageCloud,
+    saveVideoCloud,
 }

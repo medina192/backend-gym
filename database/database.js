@@ -44,9 +44,9 @@ connection.connect((error) => {
 
 const connection = mysql.createConnection({
     host     : 'sql3.freemysqlhosting.net',
-    user     : 'sql3416723',
-    password : 'q1akAbmbxh',
-    database : 'sql3416723'
+    user     : 'sql3418581',
+    password : 'CITCQCUiUp',
+    database : 'sql3418581'
 });
 
 connection.connect((error) => {
