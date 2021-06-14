@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 const bcrypt = require('bcryptjs');
-const connection = require('../database/database');
+const pool = require('../database/database');
 //const { generateToken } = require('../middlewares/generateToken');
 
 const getListUsers = async(req, res) => {
@@ -11,7 +11,7 @@ const getListUsers = async(req, res) => {
 
     const sqlRegister = `SELECT mensajes_string from mensajes WHERE email_usuario_entrenador = "${email_usuario_entrenador}"`;
 
-    connection.query(sqlRegister, (error, resp) => {
+    pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -41,7 +41,7 @@ const getMessages = async(req, res) => {
 
     const sqlRegister = `SELECT mensajes_string from mensajes WHERE email_usuario_entrenador = "${email_usuario_entrenador}"`;
 
-    connection.query(sqlRegister, (error, resp) => {
+    pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -89,7 +89,7 @@ const userSendMessage = async(req, res) => {
 
         const sqlRegister = `UPDATE mensajes SET mensajes_string = ? WHERE email_usuario_entrenador="${email_usuario_entrenador}"`;
     
-        connection.query(sqlRegister, body, (error, resp) => {
+        pool.query(sqlRegister, body, (error, resp) => {
             if(error)
             {   
                 console.log(error.sqlMessage);
@@ -119,7 +119,7 @@ const userSendMessage = async(req, res) => {
         
         const sqlRegister = `INSERT INTO mensajes SET ?`;
     
-        connection.query(sqlRegister,body, (error, resp) => {
+        pool.query(sqlRegister,body, (error, resp) => {
             if(error)
             {   
                 console.log(error.sqlMessage);

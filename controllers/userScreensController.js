@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 const bcrypt = require('bcryptjs');
-const connection = require('../database/database');
+const pool = require('../database/database');
 //const { generateToken } = require('../middlewares/generateToken');
 
 const getListGeneralTrainers = async(req, res) => {
@@ -8,7 +8,7 @@ const getListGeneralTrainers = async(req, res) => {
     
     const sqlRegister = `select * from usuario where usuario.idusuario in ( select idusuario from usuario_Rol where idrol = 2);`;
 
-    connection.query(sqlRegister, (error, resp) => {
+    pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -40,7 +40,7 @@ const getMessages = async(req, res) => {
 
     const sqlRegister = `SELECT mensajes_string from mensajes WHERE id_relacion_entrenador_usuario = "${id_relacion_entrenador_usuario}"`;
 
-    connection.query(sqlRegister, (error, resp) => {
+    pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -88,7 +88,7 @@ const userSendMessage = async(req, res) => {
 
         const sqlRegister = `UPDATE mensajes SET mensajes_string = ? WHERE id_relacion_entrenador_usuario="${id_relacion_entrenador_usuario}"`;
     
-        connection.query(sqlRegister, body, (error, resp) => {
+        pool.query(sqlRegister, body, (error, resp) => {
             if(error)
             {   
                 console.log(error.sqlMessage);
@@ -118,7 +118,7 @@ const userSendMessage = async(req, res) => {
         
         const sqlRegister = `INSERT INTO mensajes SET ?`;
     
-        connection.query(sqlRegister,body, (error, resp) => {
+        pool.query(sqlRegister,body, (error, resp) => {
             if(error)
             {   
                 console.log(error.sqlMessage);
@@ -147,7 +147,7 @@ const getStatistics = async(req, res) => {
 
     const sqlRegister = `SELECT * from estadisticas WHERE idUsuario = "${idUsuario}"`;
 
-    connection.query(sqlRegister, (error, resp) => {
+    pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -176,7 +176,7 @@ const createUserStatistics = async(req, res) => {
 
     const sqlRegister = `Insert into estadisticas SET ?`;
 
-    connection.query(sqlRegister, body, (error, resp) => {
+    pool.query(sqlRegister, body, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -207,7 +207,7 @@ const updateUserStatistics = async(req, res) => {
 
     const sqlRegister = `Update estadisticas SET = ? WHERE idusuario = "${idUsuario}"`;
 
-    connection.query(sqlRegister, body, (error, resp) => {
+    pool.query(sqlRegister, body, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -237,7 +237,7 @@ const getWorkByMMuscle = async(req, res) => {
 
     const sqlRegister = `SELECT trabajo_por_musculo from estadisticas WHERE idUsuario = "${idUsuario}"`;
 
-    connection.query(sqlRegister, (error, resp) => {
+    pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -270,7 +270,7 @@ const updateWorkByMuscle = async(req, res) => {
 
     const sqlRegister = `Update estadisticas SET trabajo_por_musculo = '${exercisesString}'  WHERE idUsuario = "${idUsuario}"`;
 
-    connection.query(sqlRegister, body, (error, resp) => {
+    pool.query(sqlRegister, body, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -300,7 +300,7 @@ const getMeasures = async(req, res) => {
 
     const sqlRegister = `SELECT registro_peso from estadisticas WHERE idUsuario = "${idUsuario}"`;
 
-    connection.query(sqlRegister, (error, resp) => {
+    pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -334,7 +334,7 @@ const updateMeasures = async(req, res) => {
     console.log('body s', exercisesString);
     const sqlRegister = `Update estadisticas SET registro_peso = '${exercisesString}'  WHERE idUsuario = "${idUsuario}"`;
 
-    connection.query(sqlRegister, body, (error, resp) => {
+    pool.query(sqlRegister, body, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -364,7 +364,7 @@ const saveRoutineByUser = async(req, res) => {
 
     const sqlRegister = `INSERT INTO rutinas SET ?`;
 
-    connection.query(sqlRegister,body, (error, resp) => {
+    pool.query(sqlRegister,body, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);

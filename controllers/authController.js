@@ -1,7 +1,7 @@
 
 const mysql = require('mysql');
 const bcrypt = require('bcryptjs');
-const connection = require('../database/database');
+const pool = require('../database/database');
 //const { generateToken } = require('../middlewares/generateToken');
 
 const registerNewUser = async(req, res) => {
@@ -13,7 +13,7 @@ const registerNewUser = async(req, res) => {
     
     const sqlRegister = `INSERT INTO usuario SET ?`;
 
-    connection.query(sqlRegister,body, (error, resp) => {
+    pool.query(sqlRegister,body, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -42,7 +42,7 @@ const updateAfterSaveRol = async(req, res) => {
     
     const sqlRegister = `UPDATE usuario SET descripcion_entrenador = "${body.descripcion_entrenador}", cedula_entrenador = "${body.cedula_entrenador}" WHERE idusuario="${idusuario}"`;
 
-    connection.query(sqlRegister, (error, resp) => {
+    pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -70,7 +70,7 @@ const saveRol = async(req, res) => {
     
     const sqlRegister = `INSERT INTO usuario_Rol SET ?`;
 
-    connection.query(sqlRegister,body, (error, resp) => {
+    pool.query(sqlRegister,body, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -101,7 +101,7 @@ const logIn = async(req, res) => {
 
 
 
-        connection.query(sqlVerifyEmail, (error, resp) => {
+        pool.query(sqlVerifyEmail, (error, resp) => {
             
             if(resp.length > 0)
             {
@@ -145,7 +145,7 @@ const getRol = async(req, res) => {
     
     const sqlRegister = `Select idrol from usuario_Rol WHERE idusuario="${idrol}"`;
 
-    connection.query(sqlRegister, (error, resp) => {
+    pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);

@@ -20,7 +20,7 @@ const http = require('http');
 
 
 const mysql = require('mysql');
-const connection = require('./database/database');
+//onst connection = require('./database/database');
 const cors = require('cors');
 const path = require('path');
 

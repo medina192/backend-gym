@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 const bcrypt = require('bcryptjs');
-const connection = require('../database/database');
+const pool = require('../database/database');
 const path = require('path');
 
 const cloudinary = require('cloudinary').v2;
@@ -154,7 +154,7 @@ const saveImageCloud = async(req, res) => {
   try {
     const sqlRegister = `INSERT INTO documentos SET ?`;
 
-    connection.query(sqlRegister,body, (error, resp) => {
+    pool.query(sqlRegister,body, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -242,7 +242,7 @@ const saveVideoCloud = async(req, res) => {
   try {
     const sqlRegister = `INSERT INTO documentos SET ?`;
 
-    connection.query(sqlRegister,body, (error, resp) => {
+    pool.query(sqlRegister,body, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -363,7 +363,7 @@ const saveImage = async(req, res) => {
   try {
     const sqlRegister = `INSERT INTO documentos SET ?`;
 
-    connection.query(sqlRegister,body, (error, resp) => {
+    pool.query(sqlRegister,body, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -486,7 +486,7 @@ const saveVideo = async(req, res) => {
   try {
     const sqlRegister = `INSERT INTO documentos SET ?`;
 
-    connection.query(sqlRegister,body, (error, resp) => {
+    pool.query(sqlRegister,body, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -656,7 +656,7 @@ const savePdf = async(req, res) => {
     try {
       const sqlRegister = `INSERT INTO documentos SET ?`;
 
-      connection.query(sqlRegister,body, (error, resp) => {
+      pool.query(sqlRegister,body, (error, resp) => {
           if(error)
           {   
               console.log(error.sqlMessage);
@@ -823,7 +823,7 @@ const createPDF = async(req, res) => {
     try {
       const sqlRegister = `INSERT INTO documentos SET ?`;
   
-      connection.query(sqlRegister,body, (error, resp) => {
+      pool.query(sqlRegister,body, (error, resp) => {
           if(error)
           {   
               console.log(error.sqlMessage);
@@ -923,7 +923,7 @@ const createPDF = async(req, res) => {
 
   const sqlRegister = `INSERT INTO documentos SET ?`;
 
-  connection.query(sqlRegister,body, (error, resp) => {
+  pool.query(sqlRegister,body, (error, resp) => {
       if(error)
       {   
           console.log(error.sqlMessage);
@@ -957,7 +957,7 @@ const getDocuments = async(req, res) => {
   try {
     const sqlRegister = `SELECT * FROM documentos WHERE idEntrenador = ${idEntrenador}`;
 
-    connection.query(sqlRegister, (error, resp) => {
+    pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -986,9 +986,10 @@ const downloadFile = async(req, res) => {
 
   //console.log(req.body);
   //const url = req.body.urlInServer;
-  res.download('./uploads/ERC-001.jpg');
+  //res.download('./uploads/ERC-001.jpg');
   //res.download(`./public/${url}`);
-
+  res.download('http://www.google.com/images/srpr/logo11w.png');
+  
 }
 
 

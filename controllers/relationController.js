@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-const connection = require('../database/database');
+const pool = require('../database/database');
 //const { generateToken } = require('../middlewares/generateToken');
 const nodemailer = require("nodemailer");
 //const { transporter } = require('../services/sendEmail');
@@ -13,7 +13,7 @@ const registerRelation = async(req, res) => {
 
     console.log(body);
 
-    connection.query(sqlRegister, body, (error, resp) => {
+    pool.query(sqlRegister, body, (error, resp) => {
         if(error)
         {   
             console.log('error');
@@ -43,7 +43,7 @@ const searchRelations = async(req, res) => {
 
     //const sqlRegister = `SELECT * from relacion_entrenador_usuario WHERE emailkey = '${email_usuario_entrenador}' `;
       const sqlRegister = `SELECT * from relacion_entrenador_usuario WHERE email_usuario_entrenador = "${email_usuario_entrenador}"`;
-    connection.query(sqlRegister, (error, resp) => {
+    pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -74,7 +74,7 @@ const getMyTrainers = async(req, res) => {
     //const sqlRegister = `SELECT * from relacion_entrenador_usuario WHERE emailkey = '${email_usuario_entrenador}' `;
       const sqlRegister = `SELECT email_entrenador from relacion_entrenador_usuario WHERE email_usuario = "${email_usuario}"`;
     
-      connection.query(sqlRegister, (error, resp) => {
+      pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -106,7 +106,7 @@ const getMyUsers = async(req, res) => {
     //const sqlRegister = `SELECT * from relacion_entrenador_usuario WHERE emailkey = '${email_usuario_entrenador}' `;
       const sqlRegister = `SELECT * from relacion_entrenador_usuario WHERE email_entrenador = "${email_entrenador}"`;
     
-      connection.query(sqlRegister, (error, resp) => {
+      pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -137,7 +137,7 @@ const relationChangeStatus = async(req, res) => {
 
     const sqlRegister = `UPDATE relacion_entrenador_usuario SET estado_subscripcion = ? WHERE email_usuario_entrenador="${email_usuario_entrenador}"`;
     
-        connection.query(sqlRegister, body, (error, resp) => {
+        pool.query(sqlRegister, body, (error, resp) => {
             if(error)
             {   
                 console.log(error.sqlMessage);
@@ -171,7 +171,7 @@ const getMyTrainersInformation = async(req, res) => {
     //const sqlRegister = `SELECT * from relacion_entrenador_usuario WHERE emailkey = '${email_usuario_entrenador}' `;
       const sqlRegister = `SELECT * from usuario WHERE email = "${email_trainer}"`;
     
-      connection.query(sqlRegister, (error, resp) => {
+      pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -319,7 +319,7 @@ const saveRoutineByTrainer = async(req, res) => {
 
     const sqlRegister = `INSERT INTO rutinas SET ?`;
 
-    connection.query(sqlRegister,body, (error, resp) => {
+    pool.query(sqlRegister,body, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -352,7 +352,7 @@ const updateRoutineByTrainer = async(req, res) => {
     id_relacion_entrenador_usuario = '${body.id_relacion_entrenador_usuario}',
     idUsuario = '${body.idUsuario}', nombre = '${body.nombre}' WHERE idRutinas = "${idRutina}";`;
 
-    connection.query(sqlRegister,body, (error, resp) => {
+    pool.query(sqlRegister,body, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -383,7 +383,7 @@ const getRoutinesByUser = (req, res) => {
 
     const sqlRegister = `SELECT * FROM rutinas WHERE idUsuario = ${id}`;
 
-    connection.query(sqlRegister, (error, resp) => {
+    pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -413,7 +413,7 @@ const getRoutines = async(req, res) => {
 
     const sqlRegister = `SELECT * FROM rutinas WHERE id_relacion_entrenador_usuario = ${id}`;
 
-    connection.query(sqlRegister, (error, resp) => {
+    pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -442,7 +442,7 @@ const getTrainersOfRoutines = async(req, res) => {
 
     const sqlRegister = `select * from usuario where usuario.idusuario in (select idEntrenador from relacion_entrenador_usuario where id_relacion_entrenador_usuario = ${id} );`;
 
-    connection.query(sqlRegister, (error, resp) => {
+    pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -473,7 +473,7 @@ const getSavedRoutinesByTrainer = async(req, res) =>{
 
         const sqlRegister = `select id_relacion_entrenador_usuario from  relacion_entrenador_usuario where idEntrenador = '${idTrainer}';`;
 
-        connection.query(sqlRegister, (error, resp) => {
+        pool.query(sqlRegister, (error, resp) => {
             if(error)
             {   
                 console.log(error.sqlMessage);
@@ -524,7 +524,7 @@ const getSavedRoutinesByTrainer = async(req, res) =>{
 
         const sqlRegister = ` select * from rutinas where find_in_set(id_relacion_entrenador_usuario, '${auxSqlLine}');`;
 
-        connection.query(sqlRegister, (error, resp) => {
+        pool.query(sqlRegister, (error, resp) => {
             if(error)
             {   
                 console.log(error.sqlMessage);

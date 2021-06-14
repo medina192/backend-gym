@@ -1,6 +1,6 @@
 
 const mysql = require('mysql');
-const connection = require('../database/database');
+const pool = require('../database/database');
 
 const registerNewGym = async(req, res) => {
 
@@ -8,7 +8,7 @@ const registerNewGym = async(req, res) => {
     
     const sqlRegister = `INSERT INTO gimnasios SET ?`;
 
-    connection.query(sqlRegister,body, (error, resp) => {
+    pool.query(sqlRegister,body, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -37,7 +37,7 @@ const searchGYmByTrainer = async(req, res) => {
     
     const sqlRegister = `SELECT * FROM gimnasios WHERE idEntrenador = ${id}`;
 
-    connection.query(sqlRegister, (error, resp) => {
+    pool.query(sqlRegister, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -64,7 +64,7 @@ const getGyms = async(req, res) => {
     
     const sqlRegister = `Select * from gimnasios`;
 
-    connection.query(sqlRegister,body, (error, resp) => {
+    pool.query(sqlRegister,body, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
@@ -103,7 +103,7 @@ const updateGym = async(req, res) => {
     servicios = '${body.servicios}'
     WHERE idEntrenador = ${idEntrenador}`;
 
-    connection.query(sqlRegister,body, (error, resp) => {
+    pool.query(sqlRegister,body, (error, resp) => {
         if(error)
         {   
             console.log(error.sqlMessage);
