@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 
+
 var pool = mysql.createPool({
     host     : '5.181.218.1',
     user     : 'u743223069_gymroom',
@@ -26,8 +27,9 @@ pool.getConnection(function (error, conn) {
 
 });
 */
-var selectSQL = `Insert into proof(nombres) values('alejandro')`;
 
+//var selectSQL = `Insert into proof(nombres) values('alejandro')`;
+var selectSQL = `select * from usuario`;
 pool.getConnection(function (error, conn) {
     try {
         if(error){

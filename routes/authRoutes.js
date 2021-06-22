@@ -13,4 +13,5 @@ router.post('/registerrol', saveRol);
 router.post('/registerafterrol', updateAfterSaveRol);
 router.get('/getrol/:idrol', getRol);
 
+
 module.exports = router;

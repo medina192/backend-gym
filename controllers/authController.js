@@ -4,6 +4,8 @@ const bcrypt = require('bcryptjs');
 const pool = require('../database/database');
 //const { generateToken } = require('../middlewares/generateToken');
 
+
+
 const registerNewUser = async(req, res) => {
 
     const body = req.body;
